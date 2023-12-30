@@ -16,7 +16,6 @@
 
 body {
   font-family: var(--font-family);
-  /* margin: 1rem 2rem; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -123,6 +122,7 @@ img {
 }
 .img-container {
   background-color: var(--secondary);
+  background-image: url("../public/Capture.PNG");
   background-repeat: no-repeat;
   background-size: cover;
   object-fit: contain;
@@ -176,5 +176,54 @@ img {
   color: var(--primary);
   display: flex;
   align-items: flex-end;
+  justify-content: center;
+  cursor: pointer;
 }
 /* Color Container Styling Ends Here */
+
+/* Copied Model Styles Starts Here */
+.copied-sign {
+  font-family: var(--font-family);
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 3rem !important;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+  font-weight: 500;
+  font-size: 0.8rem;
+}
+
+/* Copied Model Styles Ends Here */
+
+/* Mobile Responsiveness Starts Here */
+@media (max-width: 575.98px) {
+  .navbar {
+    position: fixed;
+    left: 0rem;
+    font-size: 1rem;
+    border-bottom-right-radius: 1rem;
+  }
+  #colorContainer {
+    display: block !important;
+    top: 4%;
+    height: 100%;
+  }
+
+  #colorContainer div {
+    height: 30%;
+  }
+
+  .add-btn {
+    right: 1rem;
+    bottom: -0.1rem;
+  }
+
+  .add-btn img {
+    width: 3rem;
+  }
+}
+
+/* Mobile Responsiveness Ends Here */

@@ -264,7 +264,11 @@ img {
   }
 
   .add-btn img {
-    width: 3rem;
+    width: 3.5rem;
+  }
+
+  .home-loading{
+    left: 45%;
   }
 }
 

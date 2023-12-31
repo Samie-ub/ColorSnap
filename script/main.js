@@ -159,7 +159,7 @@ document.addEventListener("DOMContentLoaded", function () {
       colorContainer.style.display = "none";
       imageSelected = true;
 
-      clearInterval(colorInterval); // Clear any existing color generation interval
+      clearInterval(colorInterval);
 
       loadImage(file)
         .then((image) => {

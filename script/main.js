@@ -4,61 +4,69 @@ setTimeout(() => {
 }, 3000);
 
 document.addEventListener("DOMContentLoaded", function () {
-  const imageInput = document.getElementById("imageInput");
+  const loader = document.getElementById("loader");
   const colorContainer = document.getElementById("colorContainer");
-  const addBtn = document.querySelector(".add-btn img");
+  const homeContainer = document.querySelector(".home-container");
+  let generateColors = true;
+  let imageSelected = false;
+  let colorInterval;
 
-  let colorContainerVisible = false;
+  function getRandomColor() {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
 
-  addBtn.addEventListener("click", handleButtonClick);
+  function updateColorPalette() {
+    if (!generateColors || imageSelected) return;
 
-  function handleButtonClick() {
-    if (colorContainerVisible) {
-      colorContainer.innerHTML = "";
-      colorContainer.style.display = "none";
+    colorContainer.innerHTML = "";
+    for (let i = 0; i < 5; i++) {
+      const colorDiv = document.createElement("div");
+      const randomColor = getRandomColor();
 
-      addBtn.src = "./public/add.png";
+      colorDiv.style.backgroundColor = randomColor;
+      colorDiv.textContent = randomColor;
+      colorDiv.addEventListener("click", function () {
+        navigator.clipboard.writeText(randomColor);
+        showCopiedSign(colorDiv);
+      });
 
-      colorContainerVisible = false;
-    } else {
-      imageInput.click();
+      colorContainer.appendChild(colorDiv);
     }
   }
 
-  imageInput.addEventListener("change", handleImageUpload);
-
-  function handleImageUpload() {
-    const file = imageInput.files[0];
-
-    if (file) {
-      addBtn.src = "./public/back.png";
-      colorContainer.style.display = "none";
-
-      loadImage(file)
-        .then((image) => extractColors(image))
-        .catch((error) => console.error("Error loading image:", error));
-    }
+  function showCopiedSign(element) {
+    const copiedSign = document.createElement("div");
+    copiedSign.className = "copied-sign";
+    copiedSign.textContent = "Copied!";
+    element.appendChild(copiedSign);
+    setTimeout(() => {
+      copiedSign.remove();
+    }, 1000);
   }
 
-  function loadImage(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
+  function displayLoading() {
+    // Create the loader element
+    const loaderElement = document.createElement("div");
+    loaderElement.classList.add("image-loader");
 
-      reader.onload = function (e) {
-        const image = new Image();
-        image.src = e.target.result;
+    // Center the loader using CSS
+    loaderElement.style.position = "absolute";
+    loaderElement.style.top = "50%";
+    loaderElement.style.left = "50%";
 
-        image.onload = function () {
-          resolve(image);
-        };
+    // Append the loader to the homeContainer
+    homeContainer.appendChild(loaderElement);
 
-        image.onerror = function () {
-          reject("Failed to load the image.");
-        };
-      };
+    return loaderElement;
+  }
 
-      reader.readAsDataURL(file);
-    });
+  function removeLoading(loaderElement) {
+    loaderElement.remove();
   }
 
   function extractColors(image) {
@@ -72,14 +80,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (colorValues.length > 2) {
         displayColors(colorValues);
-
-        colorContainer.style.display = "flex";
-        colorContainerVisible = true;
       } else {
         alert("Image must contain at least 2 valid color swatches.");
-        colorContainer.style.display = "none";
-
-        colorContainerVisible = false;
         location.reload();
       }
     } else {
@@ -126,4 +128,91 @@ document.addEventListener("DOMContentLoaded", function () {
     document.execCommand("copy");
     document.body.removeChild(textarea);
   }
+
+  const imageInput = document.getElementById("imageInput");
+  const addBtn = document.querySelector(".add-btn img");
+
+  let colorContainerVisible = false;
+
+  addBtn.addEventListener("click", handleButtonClick);
+
+  function handleButtonClick() {
+    if (colorContainerVisible) {
+      colorContainer.innerHTML = "";
+      colorContainer.style.display = "none";
+
+      addBtn.src = "./public/add.png";
+
+      colorContainerVisible = false;
+    } else {
+      imageInput.click();
+    }
+  }
+
+  imageInput.addEventListener("change", handleImageUpload);
+
+  function handleImageUpload() {
+    const file = imageInput.files[0];
+
+    if (file) {
+      const loadingSign = displayLoading();
+      addBtn.src = "./public/back.png";
+      colorContainer.style.display = "none";
+      imageSelected = true;
+
+      clearInterval(colorInterval); // Clear any existing color generation interval
+
+      loadImage(file)
+        .then((image) => {
+          homeContainer.style.backgroundImage = `url('${URL.createObjectURL(
+            file
+          )}')`;
+          homeContainer.style.backgroundSize = "contain";
+          homeContainer.style.backgroundRepeat = "no-repeat";
+          homeContainer.style.backgroundPosition = "center";
+
+          setTimeout(() => {
+            extractColors(image);
+            removeLoading(loadingSign);
+            colorContainer.style.display = "flex";
+            colorInterval = setInterval(updateColorPalette, 1000); 
+          }, 5000); 
+        })
+        .catch((error) => {
+          console.error("Error loading image:", error);
+        });
+    }
+  }
+
+  function loadImage(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        const image = new Image();
+        image.src = e.target.result;
+
+        image.onload = function () {
+          resolve(image);
+        };
+
+        image.onerror = function () {
+          reject("Failed to load the image.");
+        };
+      };
+
+      reader.readAsDataURL(file);
+    });
+  }
+
+  colorContainer.addEventListener("mouseenter", () => {
+    generateColors = false;
+    clearInterval(colorInterval);
+  });
+
+  colorContainer.addEventListener("mouseleave", () => {
+    generateColors = true;
+    updateColorPalette();
+    colorInterval = setInterval(updateColorPalette, 1000);
+  });
 });

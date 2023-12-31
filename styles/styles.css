@@ -250,26 +250,37 @@ img {
   }
   #colorContainer {
     display: block !important;
-    top: 4%;
-    height: 100%;
+    top: 0%;
+    height: 100vh;
+    margin: 1rem 0;
   }
 
   #colorContainer div {
     height: 30%;
+    padding-bottom: 1rem;
   }
 
   .add-btn {
-    right: 1rem;
+    right: .4rem;
     bottom: 0.2rem;
   }
 
   .add-btn img {
     width: 3.5rem;
   }
+  .add-btn :hover {
+    scale: 1;
+  }
 
   .home-loading{
     left: 45%;
   }
+
+  .img-container {
+    height: 100vh;
+
+  }
+  
 }
 
 /* Mobile Responsiveness Ends Here */

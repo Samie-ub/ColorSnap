@@ -4,7 +4,6 @@ setTimeout(() => {
 }, 3000);
 
 document.addEventListener("DOMContentLoaded", function () {
-  const loader = document.getElementById("loader");
   const colorContainer = document.getElementById("colorContainer");
   const homeContainer = document.querySelector(".home-container");
   let generateColors = true;
@@ -176,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
             removeLoading(loadingSign);
             colorContainer.style.display = "flex";
             colorInterval = setInterval(updateColorPalette, 1000); 
-          }, 5000); 
+          }, 2000); 
         })
         .catch((error) => {
           console.error("Error loading image:", error);

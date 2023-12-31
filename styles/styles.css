@@ -204,6 +204,11 @@ img {
 /* Copied Model Styles Ends Here */
 
 /* Color Generation Loading Animation Starts Here */
+.home-loading{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
 .image-loader {
   width: 50px;
   aspect-ratio: 1;
@@ -238,6 +243,11 @@ img {
     font-size: 1rem;
     border-bottom-right-radius: 1rem;
   }
+  .home-container {
+    height: 100%;
+    width: 95%;
+    display: block !important;
+  }
   #colorContainer {
     display: block !important;
     top: 4%;
@@ -250,7 +260,7 @@ img {
 
   .add-btn {
     right: 1rem;
-    bottom: 0rem;
+    bottom: 0.2rem;
   }
 
   .add-btn img {

@@ -48,25 +48,25 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 1000);
   }
 
-  function displayLoading() {
-    // Create the loader element
-    const loaderElement = document.createElement("div");
-    loaderElement.classList.add("image-loader");
+  // function displayLoading() {
+  //   // Create the loader element
+  //   const loaderElement = document.createElement("div");
+  //   loaderElement.classList.add("image-loader");
 
-    // Center the loader using CSS
-    loaderElement.style.position = "absolute";
-    loaderElement.style.top = "50%";
-    loaderElement.style.left = "50%";
+  //   // Center the loader using CSS
+  //   loaderElement.style.position = "absolute";
+  //   loaderElement.style.top = "50%";
+  //   loaderElement.style.left = "50%";
 
-    // Append the loader to the homeContainer
-    homeContainer.appendChild(loaderElement);
+  //   // Append the loader to the homeContainer
+  //   homeContainer.appendChild(loaderElement);
 
-    return loaderElement;
-  }
+  //   return loaderElement;
+  // }
 
-  function removeLoading(loaderElement) {
-    loaderElement.remove();
-  }
+  // function removeLoading(loaderElement) {
+  //   loaderElement.remove();
+  // }
 
   function extractColors(image) {
     const vibrant = new Vibrant(image);
@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const file = imageInput.files[0];
 
     if (file) {
-      const loadingSign = displayLoading();
+      // const loadingSign = displayLoading();
       addBtn.src = "./public/back.png";
       colorContainer.style.display = "none";
       imageSelected = true;
@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           setTimeout(() => {
             extractColors(image);
-            removeLoading(loadingSign);
+            // removeLoading(loadingSign);
             colorContainer.style.display = "flex";
             colorInterval = setInterval(updateColorPalette, 1000); 
           }, 2000); 

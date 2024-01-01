@@ -19,11 +19,30 @@ document.addEventListener("DOMContentLoaded", function () {
     return color;
   }
 
+  function generateInitialColors(count) {
+    const initialColors = [];
+    for (let i = 0; i < count; i++) {
+      initialColors.push(getRandomColor());
+    }
+    return initialColors;
+  }
+
+  function displayInitialColors() {
+    colorContainer.innerHTML = "";
+    initialColors.forEach((color) => {
+      const colorDiv = document.createElement("div");
+      colorDiv.style.backgroundColor = color;
+      colorDiv.textContent = color;
+      colorDiv.addEventListener("click", () => handleColorClick(color));
+      colorContainer.appendChild(colorDiv);
+    });
+  }
+
   function updateColorPalette() {
     if (!generateColors || imageSelected) return;
 
     colorContainer.innerHTML = "";
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 6; i++) {
       const colorDiv = document.createElement("div");
       const randomColor = getRandomColor();
 
@@ -38,6 +57,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  colorContainer.addEventListener("mouseenter", () => {
+    generateColors = false;
+    clearInterval(colorInterval);
+  });
+
+  colorContainer.addEventListener("mouseleave", () => {
+    generateColors = true;
+    updateColorPalette();
+    colorInterval = setInterval(updateColorPalette, 1000);
+  });
+
   function showCopiedSign(element) {
     const copiedSign = document.createElement("div");
     copiedSign.className = "copied-sign";
@@ -47,26 +77,6 @@ document.addEventListener("DOMContentLoaded", function () {
       copiedSign.remove();
     }, 1000);
   }
-
-  // function displayLoading() {
-  //   // Create the loader element
-  //   const loaderElement = document.createElement("div");
-  //   loaderElement.classList.add("image-loader");
-
-  //   // Center the loader using CSS
-  //   loaderElement.style.position = "absolute";
-  //   loaderElement.style.top = "50%";
-  //   loaderElement.style.left = "50%";
-
-  //   // Append the loader to the homeContainer
-  //   homeContainer.appendChild(loaderElement);
-
-  //   return loaderElement;
-  // }
-
-  // function removeLoading(loaderElement) {
-  //   loaderElement.remove();
-  // }
 
   function extractColors(image) {
     const vibrant = new Vibrant(image);
@@ -154,7 +164,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const file = imageInput.files[0];
 
     if (file) {
-      // const loadingSign = displayLoading();
       addBtn.src = "./public/back.png";
       colorContainer.style.display = "none";
       imageSelected = true;
@@ -163,19 +172,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
       loadImage(file)
         .then((image) => {
-          homeContainer.style.backgroundImage = `url('${URL.createObjectURL(
-            file
-          )}')`;
+          homeContainer.style.backgroundImage = `url('${URL.createObjectURL(file)}')`;
           homeContainer.style.backgroundSize = "contain";
           homeContainer.style.backgroundRepeat = "no-repeat";
           homeContainer.style.backgroundPosition = "center";
 
           setTimeout(() => {
             extractColors(image);
-            // removeLoading(loadingSign);
             colorContainer.style.display = "flex";
-            colorInterval = setInterval(updateColorPalette, 1000); 
-          }, 2000); 
+            colorInterval = setInterval(updateColorPalette, 1000);
+          }, 3000);
         })
         .catch((error) => {
           console.error("Error loading image:", error);
@@ -204,14 +210,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  colorContainer.addEventListener("mouseenter", () => {
-    generateColors = false;
-    clearInterval(colorInterval);
-  });
-
-  colorContainer.addEventListener("mouseleave", () => {
-    generateColors = true;
-    updateColorPalette();
-    colorInterval = setInterval(updateColorPalette, 1000);
-  });
+  // Invoke the initial colors generation and display
+  const initialColors = generateInitialColors(6);
+  displayInitialColors();
 });

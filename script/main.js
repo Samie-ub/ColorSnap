@@ -68,16 +68,6 @@ document.addEventListener("DOMContentLoaded", function () {
     colorInterval = setInterval(updateColorPalette, 1000);
   });
 
-  function showCopiedSign(element) {
-    const copiedSign = document.createElement("div");
-    copiedSign.className = "copied-sign";
-    copiedSign.textContent = "Copied!";
-    element.appendChild(copiedSign);
-    setTimeout(() => {
-      copiedSign.remove();
-    }, 1000);
-  }
-
   function extractColors(image) {
     const vibrant = new Vibrant(image);
     const swatches = vibrant.swatches();

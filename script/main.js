@@ -152,29 +152,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function handleImageUpload() {
     const file = imageInput.files[0];
-
+  
     if (file) {
       addBtn.src = "./public/back.png";
       colorContainer.style.display = "none";
       imageSelected = true;
-
+      document.querySelector('.home-loading').style.display = 'grid';
+      document.querySelector('.home-loading').style.zIndex = 99;
+  
       clearInterval(colorInterval);
-
+  
       loadImage(file)
         .then((image) => {
           homeContainer.style.backgroundImage = `url('${URL.createObjectURL(file)}')`;
           homeContainer.style.backgroundSize = "contain";
           homeContainer.style.backgroundRepeat = "no-repeat";
           homeContainer.style.backgroundPosition = "center";
-
+  
           setTimeout(() => {
             extractColors(image);
             colorContainer.style.display = "flex";
             colorInterval = setInterval(updateColorPalette, 1000);
+            document.querySelector('.home-loading').style.display = 'none';
           }, 3000);
         })
         .catch((error) => {
           console.error("Error loading image:", error);
+          document.querySelector('.image-loader').style.display = 'grid';
         });
     }
   }
@@ -200,7 +204,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Invoke the initial colors generation and display
   const initialColors = generateInitialColors(6);
   displayInitialColors();
 });

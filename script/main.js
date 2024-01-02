@@ -69,23 +69,19 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   function extractColors(image) {
-    const vibrant = new Vibrant(image);
-    const swatches = vibrant.swatches();
-
-    if (swatches && Object.keys(swatches).length > 0) {
-      const colorValues = Object.values(swatches)
-        .filter((swatch) => swatch !== undefined)
-        .map((swatch) => swatch.getHex());
-
-      if (colorValues.length > 2) {
-        displayColors(colorValues);
-      } else {
-        alert("Image must contain at least 2 valid color swatches.");
-        location.reload();
-      }
-    } else {
-      console.error("Unable to extract colors from the image.");
-    }
+    const colorThief = new ColorThief();
+    const colorValues = colorThief.getPalette(image);
+  
+    // Convert ColorThief results to hex format
+    const hexColors = colorValues.map(color => `#${rgbToHex(color[0])}${rgbToHex(color[1])}${rgbToHex(color[2])}`);
+  
+    displayColors(hexColors);
+  }
+  
+  // Helper function to convert RGB to hex
+  function rgbToHex(value) {
+    const hex = value.toString(16);
+    return hex.length === 1 ? '0' + hex : hex;
   }
 
   function displayColors(colors) {

@@ -169,6 +169,7 @@ img {
   left: 2.4%;
   width: 95.5%;
   height: 90vh;
+  background-color: var(--primary);
 }
 
 
